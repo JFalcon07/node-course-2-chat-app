@@ -17,9 +17,13 @@ io.on('connection', (socket) => {
     console.log('New user connected');
         // socket.emit from Admin text Welcome to the chat app
     socket.emit('newMessage', generateMessage('Admin','Welcome to the chat app'));
-    socket.on('createMessage', (message) => {
+    socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
+
+    socket.on('createMessage', (message,callback) => {
         console.log('createMessage', message);
-        io.emit('newMessage', generateMessage('Admin', 'New user joined'));
+        //socket.broadcast.emit from Admin text New user joined
+        socket.broadcast.emit('newMessage', generateMessage(message.from, message.text));
+        callback('This is from the server.');
     });
 });
 io.on('disconnect', () => {

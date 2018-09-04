@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
         console.log('createMessage', message);
         //socket.broadcast.emit from Admin text New user joined
         socket.broadcast.emit('newMessage', generateMessage(message.from, message.text));
-        callback('This is from the server.');
+        callback();
     });
     socket.on('createLocationMessage', (coords) => {
         io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));

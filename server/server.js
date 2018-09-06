@@ -4,7 +4,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 
 const {generateMessage, generateLocationMessage} = require('./utils/message');
-const {isRealString} = require('./utils/validation');
+const {isRealString,formating} = require('./utils/validation');
 const {Users} = require('./utils/users');
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
@@ -19,12 +19,10 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
     console.log('New user connected');
     socket.on('join',(params, callback)=>{
+        params = formating(params);
         if(!isRealString(params.name) || !isRealString(params.room)){
             return callback('Name and room name are required.');
         }
-        params.room = params.room.toLowerCase();
-        params.name = params.name.toLowerCase().replace(/^\w/, c => c.toUpperCase());
-
         for(let user of users.users){
             if(user.name == params.name){
                 return callback('Username already in use');
